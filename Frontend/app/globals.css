@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #0a0e0f;
+  color: #d5e8dc;
+}
+
+/* Thin tactical scrollbars */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #12181a; }
+::-webkit-scrollbar-thumb { background: #1f2b2e; border-radius: 3px; }

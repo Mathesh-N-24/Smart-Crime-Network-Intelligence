@@ -4,25 +4,40 @@ Smart Crime Network Intelligence platform transforms scattered FIRs and evidence
 
 
 🚀 How to Run
+
 Requirements
-    1.Docker Desktop
-    2.Git (optional)
-    3.8 GB RAM or more recommended
+
+Docker Desktop
+
+Git (optional)
+
+8 GB RAM or more recommended
+
 Make sure Docker Desktop is running before starting CNAS.
 
 1. Clone or Download
+
 Clone the repository:
-   git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-   cd YOUR_REPOSITORY
+
+git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
+cd YOUR_REPOSITORY
+
 Or download the repository as a ZIP from GitHub and extract it.
 
 2. Start CNAS
+
 Run this command from the project root:
-         docker compose up --build -d
+
+docker compose up --build -d
+
+The first build may take several minutes.
 
 3. Check Services
+
 docker compose ps
+
 The following services should be running:
+
 neo4j
 redis
 backend
@@ -30,55 +45,135 @@ worker
 frontend
 
 4. Open the Dashboard
+
 Open:
+
 http://localhost:3000
 
 5. Check Backend
+
 Open:
+
 http://localhost:8000/health
 
 6. Test the Graph API
+
 Open:
+
 http://localhost:8000/graph?min_confidence=0
 
+This should return the current graph nodes and relationships.
+
 7. Open Neo4j
+
 Open:
+
 http://localhost:7474
 
 Default development credentials:
+
 Username: neo4j
 Password: cnas_secure_pass123
+
 Change these credentials before any real deployment.
 
 🧪 Mock Test Data
-A synthetic dataset is included 
+
+A synthetic dataset is included at:
+
+test-data/cnas_mock_case_project_nightfall.json
+
 It contains fictional persons, accounts, devices, locations, relationships, evidence IDs, confidence scores, and timestamps.
+
 Use it to test evidence ingestion and graph visualization.
 
+🐳 Docker Services
+
+Service
+
+Purpose
+
+Port
+
+Frontend
+
+CNAS dashboard
+
+3000
+
+Backend
+
+FastAPI API
+
+8000
+
+Neo4j
+
+Graph database + GDS
+
+7474 / 7687
+
+Redis
+
+Celery message broker
+
+6379
+
+Worker
+
+Background processing
+
+—
+
 🔧 Useful Commands
-Start:docker compose up -d
 
-Build and start: docker compose up --build -d
+Start:
 
-Check containers: docker compose ps
+docker compose up -d
 
-View all logs: docker compose logs -f
+Build and start:
 
-Backend logs: docker compose logs -f backend
+docker compose up --build -d
 
-Worker logs: docker compose logs -f worker
+Check containers:
 
-Frontend logs:docker compose logs -f frontend
+docker compose ps
 
-Neo4j logs: docker compose logs -f neo4j
+View all logs:
 
-Restart: docker compose restart
+docker compose logs -f
 
-Stop: docker compose stop
+Backend logs:
 
-Rebuild after code changes: docker compose up --build -d
+docker compose logs -f backend
 
-Remove containers: docker compose down
+Worker logs:
+
+docker compose logs -f worker
+
+Frontend logs:
+
+docker compose logs -f frontend
+
+Neo4j logs:
+
+docker compose logs -f neo4j
+
+Restart:
+
+docker compose restart
+
+Stop:
+
+docker compose stop
+
+Rebuild after code changes:
+
+docker compose up --build -d
+
+Remove containers:
+
+docker compose down
 
 Do not use docker compose down -v unless you intentionally want to remove persistent Docker volumes containing Neo4j/evidence data.
 
@@ -105,15 +200,41 @@ Do not use docker compose down -v unless you intentionally want to remove persis
                           │  Worker   │
                           └───────────┘
 
+🔐 Security
 
+CNAS is designed as a local/offline investigation prototype and supports:
+
+Local processing
+
+Cryptographic evidence hashing
+
+Isolated Docker networking
+
+Graph-based investigation
+
+Offline deployment
+
+The default configuration is intended for development/demo use and should be hardened before handling real investigation data.
 
 📌 Project Status
-Smart Crime Network Intelligence is a prototype for cybersecurity research, investigation support, and demonstration.
+
+CNAS is a prototype for cybersecurity research, investigation support, and demonstration.
 
 It demonstrates:
+
 Evidence ingestion
+
 Criminal network visualization
+
 Graph analytics
+
+Entity relationships
+
+Evidence integrity
+
+Scenario analysis
+
+Dockerized deployment
 Entity relationships
 Evidence integrity
 Scenario analysis

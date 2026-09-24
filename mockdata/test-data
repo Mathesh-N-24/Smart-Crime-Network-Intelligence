@@ -1,0 +1,299 @@
+{
+  "case_id": "CNAS-DEMO-001",
+  "case_name": "Project Nightfall",
+  "description": "Synthetic criminal-network evidence for CNAS graph ingestion testing. All names, identifiers, and transactions are fictional.",
+  "entities": [
+    {
+      "id": "P001",
+      "type": "Person",
+      "name": "Arun Kumar",
+      "role": "Coordinator"
+    },
+    {
+      "id": "P002",
+      "type": "Person",
+      "name": "Vikram Shah",
+      "role": "Financier"
+    },
+    {
+      "id": "P003",
+      "type": "Person",
+      "name": "Ravi Menon",
+      "role": "Courier"
+    },
+    {
+      "id": "P004",
+      "type": "Person",
+      "name": "Neha Rao",
+      "role": "Recruiter"
+    },
+    {
+      "id": "P005",
+      "type": "Person",
+      "name": "Karan Das",
+      "role": "Technical Operator"
+    },
+    {
+      "id": "P006",
+      "type": "Person",
+      "name": "Meera Iyer",
+      "role": "Associate"
+    },
+    {
+      "id": "A001",
+      "type": "Account",
+      "name": "ACCT-1001",
+      "bank": "DemoBank"
+    },
+    {
+      "id": "A002",
+      "type": "Account",
+      "name": "ACCT-1002",
+      "bank": "DemoBank"
+    },
+    {
+      "id": "A003",
+      "type": "Account",
+      "name": "ACCT-1003",
+      "bank": "DemoBank"
+    },
+    {
+      "id": "D001",
+      "type": "Device",
+      "name": "DEV-7788",
+      "platform": "Android"
+    },
+    {
+      "id": "D002",
+      "type": "Device",
+      "name": "DEV-9921",
+      "platform": "Windows"
+    },
+    {
+      "id": "L001",
+      "type": "Location",
+      "name": "Warehouse-A",
+      "city": "Chennai"
+    },
+    {
+      "id": "L002",
+      "type": "Location",
+      "name": "Office-B",
+      "city": "Chengalpattu"
+    }
+  ],
+  "relationships": [
+    {
+      "source": "P001",
+      "target": "P002",
+      "type": "COMMUNICATES_WITH",
+      "confidence": 0.97,
+      "evidence_id": "E001"
+    },
+    {
+      "source": "P001",
+      "target": "P003",
+      "type": "DIRECTS",
+      "confidence": 0.94,
+      "evidence_id": "E002"
+    },
+    {
+      "source": "P001",
+      "target": "P004",
+      "type": "COMMUNICATES_WITH",
+      "confidence": 0.91,
+      "evidence_id": "E003"
+    },
+    {
+      "source": "P002",
+      "target": "A001",
+      "type": "CONTROLS",
+      "confidence": 0.96,
+      "evidence_id": "E004"
+    },
+    {
+      "source": "P003",
+      "target": "A002",
+      "type": "USES",
+      "confidence": 0.88,
+      "evidence_id": "E005"
+    },
+    {
+      "source": "P004",
+      "target": "P006",
+      "type": "RECRUITED",
+      "confidence": 0.86,
+      "evidence_id": "E006"
+    },
+    {
+      "source": "P005",
+      "target": "D002",
+      "type": "USES",
+      "confidence": 0.93,
+      "evidence_id": "E007"
+    },
+    {
+      "source": "P003",
+      "target": "D001",
+      "type": "USES",
+      "confidence": 0.89,
+      "evidence_id": "E008"
+    },
+    {
+      "source": "P002",
+      "target": "P005",
+      "type": "FUNDS",
+      "confidence": 0.92,
+      "evidence_id": "E009"
+    },
+    {
+      "source": "P003",
+      "target": "L001",
+      "type": "VISITED",
+      "confidence": 0.9,
+      "evidence_id": "E010"
+    },
+    {
+      "source": "P005",
+      "target": "L002",
+      "type": "VISITED",
+      "confidence": 0.84,
+      "evidence_id": "E011"
+    },
+    {
+      "source": "P004",
+      "target": "P005",
+      "type": "COMMUNICATES_WITH",
+      "confidence": 0.87,
+      "evidence_id": "E012"
+    },
+    {
+      "source": "A001",
+      "target": "A003",
+      "type": "TRANSFERRED_TO",
+      "confidence": 0.95,
+      "evidence_id": "E013"
+    },
+    {
+      "source": "A003",
+      "target": "P006",
+      "type": "ASSOCIATED_WITH",
+      "confidence": 0.83,
+      "evidence_id": "E014"
+    },
+    {
+      "source": "P006",
+      "target": "L001",
+      "type": "VISITED",
+      "confidence": 0.81,
+      "evidence_id": "E015"
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "type": "communication",
+      "timestamp": "2026-09-20T10:15:00Z",
+      "source": "synthetic_chat_log",
+      "summary": "Fictional communication link between P001 and P002."
+    },
+    {
+      "evidence_id": "E002",
+      "type": "message",
+      "timestamp": "2026-09-20T11:20:00Z",
+      "source": "synthetic_message",
+      "summary": "Fictional directive from P001 to P003."
+    },
+    {
+      "evidence_id": "E003",
+      "type": "communication",
+      "timestamp": "2026-09-20T12:05:00Z",
+      "source": "synthetic_chat_log",
+      "summary": "Fictional communication link between P001 and P004."
+    },
+    {
+      "evidence_id": "E004",
+      "type": "financial",
+      "timestamp": "2026-09-21T09:30:00Z",
+      "source": "synthetic_bank_record",
+      "summary": "Fictional account-control association."
+    },
+    {
+      "evidence_id": "E005",
+      "type": "device",
+      "timestamp": "2026-09-21T10:10:00Z",
+      "source": "synthetic_device_log",
+      "summary": "Fictional device/account association."
+    },
+    {
+      "evidence_id": "E006",
+      "type": "recruitment",
+      "timestamp": "2026-09-21T12:00:00Z",
+      "source": "synthetic_message",
+      "summary": "Fictional recruitment association."
+    },
+    {
+      "evidence_id": "E007",
+      "type": "device",
+      "timestamp": "2026-09-22T08:15:00Z",
+      "source": "synthetic_device_log",
+      "summary": "Fictional device usage association."
+    },
+    {
+      "evidence_id": "E008",
+      "type": "device",
+      "timestamp": "2026-09-22T09:00:00Z",
+      "source": "synthetic_device_log",
+      "summary": "Fictional device usage association."
+    },
+    {
+      "evidence_id": "E009",
+      "type": "financial",
+      "timestamp": "2026-09-22T10:45:00Z",
+      "source": "synthetic_bank_record",
+      "summary": "Fictional funding relationship."
+    },
+    {
+      "evidence_id": "E010",
+      "type": "location",
+      "timestamp": "2026-09-22T15:20:00Z",
+      "source": "synthetic_location_log",
+      "summary": "Fictional location visit."
+    },
+    {
+      "evidence_id": "E011",
+      "type": "location",
+      "timestamp": "2026-09-22T16:00:00Z",
+      "source": "synthetic_location_log",
+      "summary": "Fictional location visit."
+    },
+    {
+      "evidence_id": "E012",
+      "type": "communication",
+      "timestamp": "2026-09-23T09:10:00Z",
+      "source": "synthetic_chat_log",
+      "summary": "Fictional communication link."
+    },
+    {
+      "evidence_id": "E013",
+      "type": "financial",
+      "timestamp": "2026-09-23T11:25:00Z",
+      "source": "synthetic_bank_record",
+      "summary": "Fictional account transfer."
+    },
+    {
+      "evidence_id": "E014",
+      "type": "financial",
+      "timestamp": "2026-09-23T12:40:00Z",
+      "source": "synthetic_bank_record",
+      "summary": "Fictional account/person association."
+    },
+    {
+      "evidence_id": "E015",
+      "type": "location",
+      "timestamp": "2026-09-23T14:05:00Z",
+      "source": "synthetic_location_log",
+      "summary": "Fictional location visit."
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+# ============================================================================
+# AI-Powered Criminal Network Analysis System (CNAS) - Prototype
+# ============================================================================
+# OPERATIONAL NOTE (Zero-Trust / Data Sovereignty):
+# This stack is designed to run 100% air-gapped after `docker compose build`.
+# - No service reaches out to the public internet at runtime.
+# - All AI inference (OCR/ASR/NER) is intended to run on-box with locally
+#   cached model weights (mocked here for laptop-scale demo).
+# - Neo4j + Redis + FastAPI all bind to localhost-only by default; expose
+#   beyond 127.0.0.1 only via an authenticated reverse proxy on the station LAN.
+# ============================================================================
+
+version: "3.9"
+
+services:
+
+  # --------------------------------------------------------------------
+  # NEO4J - Graph database with Graph Data Science (GDS) plugin enabled.
+  # Stores the POLE model (Person, Object, Location, Event) graph.
+  # --------------------------------------------------------------------
+  neo4j:
+    image: neo4j:5.19-community
+    container_name: cnas_neo4j
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:7474:7474"   # Neo4j Browser (HTTP)
+      - "127.0.0.1:7687:7687"   # Bolt protocol (driver connections)
+    environment:
+      # NOTE: change credentials before any real deployment. Kept simple here
+      # for offline demo purposes only.
+      - NEO4J_AUTH=neo4j/cnas_secure_pass123
+      - NEO4J_PLUGINS=["graph-data-science"]
+      - NEO4J_dbms_security_procedures_unrestricted=gds.*
+      - NEO4J_dbms_security_procedures_allowlist=gds.*
+      # Keep heap/pagecache modest so this runs on a laptop (8GB RAM class).
+      - NEO4J_server_memory_heap_initial__size=512m
+      - NEO4J_server_memory_heap_max__size=1G
+      - NEO4J_server_memory_pagecache_size=512m
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+      - neo4j_import:/var/lib/neo4j/import
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:7474 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - cnas_net
+
+  # --------------------------------------------------------------------
+  # REDIS - Celery broker + result backend. In-memory, ephemeral by design
+  # (chain-of-custody state lives in Neo4j + hashed evidence store, not Redis).
+  # --------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: cnas_redis
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6379:6379"
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    networks:
+      - cnas_net
+
+  # --------------------------------------------------------------------
+  # BACKEND - FastAPI application server (sync REST API for the dashboard).
+  # --------------------------------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cnas_backend
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=cnas_secure_pass123
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+      - EVIDENCE_STORE_PATH=/data/evidence
+    volumes:
+      - ./backend:/app
+      - evidence_store:/data/evidence   # append-only raw evidence + hashes
+    depends_on:
+      neo4j:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - cnas_net
+
+  # --------------------------------------------------------------------
+  # WORKER - Celery worker executing the async AI pipeline (OCR/ASR/NER,
+  # entity resolution, phonetic aliasing, graph ingestion).
+  # --------------------------------------------------------------------
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cnas_worker
+    restart: unless-stopped
+    command: ["celery", "-A", "celery_app", "worker", "--loglevel=info", "--concurrency=2"]
+    environment:
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=cnas_secure_pass123
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+      - EVIDENCE_STORE_PATH=/data/evidence
+    volumes:
+      - ./backend:/app
+      - evidence_store:/data/evidence
+    depends_on:
+      neo4j:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - cnas_net
+
+  # --------------------------------------------------------------------
+  # FRONTEND - Next.js tactical dashboard.
+  # --------------------------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cnas_frontend
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+    depends_on:
+      - backend
+    networks:
+      - cnas_net
+
+networks:
+  cnas_net:
+    driver: bridge
+
+volumes:
+  neo4j_data:
+  neo4j_logs:
+  neo4j_import:
+  evidence_store:

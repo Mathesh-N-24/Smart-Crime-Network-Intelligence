@@ -7,44 +7,49 @@ Smart Crime Network Intelligence platform transforms scattered FIRs and evidence
 
 1. Requirements
   Install: Docker Desktop
+
   Git (optional)
+  
   8 GB RAM or more recommended
 
 Make sure Docker Desktop is running.
 
 2. Clone the Repository
 
-git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git cd YOUR_REPOSITORY
-Or download the repository ZIP from GitHub and extract it.
+  git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git cd YOUR_REPOSITORY
+  Or download the repository ZIP from GitHub and extract it.
 
 3. Start 
 Run this command from the folder containing docker-compose.yml:
+
 docker compose up --build -d
+
 Wait for the build and containers to finish starting.
 
 4. Verify Everything Is Running
 docker compose ps
 
-You should have these five services running:
+    You should have these five services running:
 
-neo4j
-redis
-backend
-worker
-frontend
+neo4j,
+redis,
+backend,
+worker,
+frontend.
 
 5. Open CNAS
 Dashboard  : http://localhost:3000
 
-Backend health: http://localhost:8000/health
+  Backend health: http://localhost:8000/health
 
-Graph API: http://localhost:8000/graph?min_confidence=0
+  Graph API: http://localhost:8000/graph?min_confidence=0
 
-Neo4j Browser : http://localhost:7474
+  Neo4j Browser : http://localhost:7474
 
 Neo4j development login:
 
 Username: neo4j
+
 Password: cnas_secure_pass123
 
 The default password is for local/demo use only. Change it before any real deployment.

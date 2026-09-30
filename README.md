@@ -130,7 +130,7 @@ Do not use docker compose down -v unless you intentionally want to delete the pe
 
 📌 Project Status
 
-CNAS is a prototype for cybersecurity research, investigation support, and demonstration.
+Smart Crime Network Intelligence  is a prototype for cybersecurity research, investigation support, and demonstration.
 
 Demonstrated Capabilities
 
